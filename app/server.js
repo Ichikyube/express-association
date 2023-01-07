@@ -49,7 +49,7 @@ app.get('/404', function(req, res) {
 const db  = require('./models')
 const Role = db.Role;
 
-db.sequelize.sync({ force: true })
+db.sequelize.sync({ force: false })
   .then(() => {
     console.log("Drop and Resync Db.");
     initial();

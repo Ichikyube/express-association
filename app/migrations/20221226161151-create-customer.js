@@ -18,8 +18,14 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'restrict'
       },
-      fullName: {
+      firstName: {
         type: Sequelize.STRING
+      },
+      lastName: {
+        type: Sequelize.STRING
+      },
+      birthDate: {
+        type: Sequelize.DATE
       },
       email: {
         type: Sequelize.STRING
