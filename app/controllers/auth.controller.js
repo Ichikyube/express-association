@@ -1,48 +1,45 @@
 const db = require("../models");
 const config = require("../config/auth.config");
-const User = db.user;
-const Role = db.role;
+const User = db.User;
+const Role = db.Role;
 
 const Op = db.Sequelize.Op;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-
-exports.signup = async (req, res) => {
+exports.signup = (req, res) => {
     // Save User to Database
-    try {
-        const user = await User.create({
-            username: req.body.username,
-            email: req.body.email,
-            password: bcrypt.hashSync(req.body.password, 8)
-        });
-    
+    User.create({
+        username: req.body.username,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password, 8)
+    })
+      .then(user => {
         if (req.body.roles) {
-            const roles = await Role.findAll({
-                where: {
-                    name: {
-                        [Op.or]: req.body.roles
-                    }
-                }
-            });
-            if(roles.length > 0) {
-                await user.setRoles(roles).then(() => {
-                    res.send({
-                        message: `User was registered as ${req.body.roles} successfully!`
-                    });
-                });
-            } else {
-                await user.setRoles([1]).then(() => {
-                    res.send({
-                        message: "User was registered successfully!"
-                    });
-                });
+          Role.findAll({
+            where: {
+              name: {
+                [Op.or]: req.body.roles
+              }
             }
-        } 
-    } catch(e) {
-        res.failServerError(e.message);
-    }
-};
+          }).then(roles => {
+            user.setRoles(roles).then(() => {
+              res.send({ message: "User was registered successfully!" });
+            });
+          });
+        } else {
+          // user role = 1
+          user.setRoles([1]).then(() => {
+            res.send({ message: "User was registered successfully!" });
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).send({ message: err.message });
+      });
+  };
 
 exports.signin = async (req, res) => {
     try {
@@ -53,7 +50,7 @@ exports.signin = async (req, res) => {
         })
 
         if(!user) {
-            res.failNotFound('Resoure Not Found');
+            res.failNotFound('Resource Not Found');
             var passwordIsValid = bcrypt.compareSync(
                 req.body.password,
                 user.password

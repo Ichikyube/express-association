@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.Customer, {
         foreignKey: "customerId",
-        otherKey: "roleId"
       }),
       this.hasMany(models.Product, {
         foreignKey: "productId",
@@ -21,7 +20,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Order.init({
-    id: DataTypes.INTEGER,
     productId: DataTypes.INTEGER,
     customerId: DataTypes.INTEGER,
     date: DataTypes.DATE

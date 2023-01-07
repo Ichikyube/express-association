@@ -11,28 +11,24 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Order, {
-        through: "user_roles",
+      this.belongsTo(models.User, {
+        through: "User_Roles",
         foreignKey: "userId",
         otherKey: "roleId"
       })
-      this.hasMany(models.Product, { through: "orders" })
+
+      this.hasMany(models.Order, { foreignKey: 'customerId' })
     }
   }
   Customer.init({
-    id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
-    },
     fullName: DataTypes.STRING,
     email: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       unique: true, lowercase: true,
       allowNull: false
     },
     phone: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: { args: true, msg: "You must enter Phone Number" },

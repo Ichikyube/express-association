@@ -20,11 +20,15 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: sequelize.literal("(now() at time zone 'utc')"), 
+        field: 'createdAt'
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
+        field: 'updatedAt'
       }
     });
   },

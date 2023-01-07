@@ -1,6 +1,6 @@
 const db = require("../models");
 const config = require("../config/auth.config");
-const Customer = db.customer;
+const Customer = db.Customer;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Customer
