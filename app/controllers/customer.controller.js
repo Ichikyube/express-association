@@ -13,9 +13,9 @@ exports.create = (req, res) => {
     }
     
     const customer = {
-        fullname:      req.body.fullname,
+        fullname:   req.body.fullname,
         email:      req.body.email,
-        phone:   req.body.phone,
+        phone:      req.body.phone,
         address:    req.body.address
     }
 
